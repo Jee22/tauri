@@ -4,6 +4,7 @@ import { MAX_X_RANGE } from '../components/chart/chart.type';
 import PortScanButton from '../components/serial-port/port-scan-button';
 import PortList from '../components/serial-port/port-list';
 import './app.module.css';
+import { useListenTauriEvent } from '../hooks/tauri-event';
 
 export default function App() {
   const [isRendering, setIsRendering] = useState(false);
@@ -11,12 +12,15 @@ export default function App() {
   const [maxXAxes, setMaxXAxes] = useState(MAX_X_RANGE);
 
   const handleRendering = () => setIsRendering(!isRendering);
-
   const handleApplyAxes = () => {
     if (axesInput) {
       setMaxXAxes(axesInput);
     }
   };
+
+  useListenTauriEvent('packet', (event) => {
+    console.log(`Payload :`, event.payload);
+  });
 
   return (
     <>
